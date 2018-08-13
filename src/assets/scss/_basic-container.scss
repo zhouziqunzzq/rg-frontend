@@ -1,0 +1,37 @@
+@import "vars";
+
+%main-container {
+  padding-top: $nav-height;
+}
+
+%flex-container-row {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+}
+
+%flex-container-column {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+}
+
+%flex-container-row-center {
+  @extend %flex-container-row;
+  justify-content: center;
+}
+
+%flex-container-row-space-between {
+  @extend %flex-container-row;
+  justify-content: space-between;
+}
