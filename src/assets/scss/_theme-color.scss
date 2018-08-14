@@ -3,9 +3,20 @@ $theme-color: #060868;
 $theme-color-light: #6982ff;
 $border-color: $theme-color;
 $shadow-color: #0b0e40;
+$mask-color: #00000044;
+
+// window
+$window-bg-color: #ffffff;
 
 // nav bar
 $nav-main-color: $theme-color;
 $nav-active-color: #0b0e40;
 $nav-hover-color: #0b0e40;
 $nav-text-color: #587b9c;
+
+// template
+$template-line-color: #828282;
+
+// lyric player
+$player-rhyme-word-color: red;
+$player-rhyme-tag-color: #0002ff;

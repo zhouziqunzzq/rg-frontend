@@ -1,0 +1,70 @@
+// slide-fade
+.slide-fade-enter-active {
+  @include transition(all .5s ease);
+}
+
+.slide-fade-leave-active {
+  @include transition(all .5s ease);
+}
+
+.slide-fade-leave-to {
+  @include transform(translateX(-500px));
+  opacity: 0;
+}
+
+.slide-fade-enter {
+  @include transform(translateX(500px));
+  opacity: 0;
+}
+
+// fade
+.fade-enter-active {
+  @include transition(all .5s ease);
+}
+
+.fade-leave-active {
+  @include transition(all .5s ease);
+}
+
+.fade-leave-to {
+  //@include transform(translateX(-500px));
+  opacity: 0;
+}
+
+.fade-enter {
+  //@include transform(translateX(500px));
+  opacity: 0;
+}
+
+// left-slide-fade
+.left-slide-fade-enter-active {
+  //@include transition(all .5s ease);
+  animation: bounce-in .5s;
+}
+
+.left-slide-fade-leave-active {
+  //@include transition(all .5s ease);
+  animation: bounce-in .5s reverse;
+}
+//
+//.left-slide-fade-leave-to {
+//  @include transform(translateX(500px));
+//  opacity: 0;
+//}
+//
+//.left-slide-fade-enter {
+//  @include transform(translateX(-500px));
+//  opacity: 0;
+//}
+
+@keyframes bounce-in {
+  0% {
+    @include transform(scale(0));
+  }
+  50% {
+    @include transform(scale(8));
+  }
+  100% {
+    @include transform(scale(1));
+  }
+}

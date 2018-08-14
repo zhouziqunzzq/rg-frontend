@@ -1,34 +1,170 @@
 <template>
     <div class="main-container">
         <div class="block">
-            <h1>Step ONE...</h1>
-            <p class="push-right">...choose topic words</p>
+            <h1>{{titleList[step]}}</h1>
+            <p class="push-right">{{subTitleList[step]}}</p>
             <hr/>
-            <WordChooser/>
+            <transition name="fade" mode="out-in">
+                <component :is="componentList[step]"
+                           :max-word-count="maxWordCount"
+                           :lyric-list="lyricList"
+                           v-on:select-template="onSelectTemplate"
+                           v-on:select-word="onSelectWord"
+                />
+            </transition>
         </div>
+        <button @click="onNextClick"
+                v-show="nextButtonShow[step]"
+                :disabled="!checkNext"
+                :class="{'active-button': checkNext}"
+        >{{nextButtonTip[step]}}
+        </button>
     </div>
 </template>
 
 <script>
     import WordChooser from "../components/WordChooser";
+    import TemplateChooser from "../components/TemplateChooser";
+    import LyricPlayer from "../components/LyricPlayer";
 
     export default {
         name: "Generate",
-        components: {WordChooser}
+        components: {TemplateChooser, WordChooser, LyricPlayer},
+        data() {
+            return {
+                step: 0,
+                titleList: ['第一步...', '第二步...', '生成中...', 'And NOW...'],
+                subTitleList: ['...选择模板', '...选择主题词', '', '...enjoy the beat and flow'],
+                nextButtonShow: [true, true, false, true],
+                nextButtonTip: ["下一步", "开始生成", "", "重新生成"],
+                componentList: ["TemplateChooser", "WordChooser", "Loader", "LyricPlayer"],
+                selectedTemplate: null,
+                selectedWordList: [],
+                lyricList: [
+                    {
+                        lyric: "腿 搁在办公桌上",
+                        rhymeToggle: true,
+                        rhymeType: "双押",
+                        rhymeCount: 1,
+                        rhymeWordCount: 2,
+                    },
+                    {
+                        lyric: "这五六分钟我只关心说唱",
+                        rhymeToggle: true,
+                        rhymeType: "双押",
+                        rhymeCount: 2,
+                        rhymeWordCount: 2,
+                    },
+                    {
+                        lyric: "大脑像硬币投进的湖里的波浪激荡",
+                        rhymeToggle: true,
+                        rhymeType: "双押",
+                        rhymeCount: 3,
+                        rhymeWordCount: 2,
+                    },
+                    {
+                        lyric: "如果你们智商170和我一样",
+                        rhymeToggle: true,
+                        rhymeType: "双押",
+                        rhymeCount: 4,
+                        rhymeWordCount: 2,
+                    },
+                ],
+            }
+        },
+        computed: {
+            maxWordCount() {
+                if (this.selectedTemplate === null)
+                    return 0;
+                else
+                    return this.selectedTemplate['verseList'].length;
+            },
+            checkNext() {
+                // return true if validate ok
+                switch (this.step) {
+                    case 0: // template
+                        return this.selectedTemplate !== null;
+                    case 1: // keyword
+                        return this.selectedWordList.length > 0
+                            && this.selectedTemplate !== null
+                            && this.selectedWordList.length <= this.selectedTemplate['verseList'].length;
+                    default:
+                        return true;
+                }
+            }
+        },
+        methods: {
+            onNextClick() {
+                let maxStep = this.componentList.length - 1;
+                if (this.step === maxStep) {
+                    this.step = 0;
+                } else {
+                    this.step++;
+                    if (this.step === 2) {  // generate lyric
+                        this.generate();
+                    }
+                }
+            },
+            onSelectTemplate(template) {
+                this.selectedTemplate = template;
+            },
+            onSelectWord(wordList) {
+                this.selectedWordList = wordList;
+            },
+            generate() {
+                let vm = this;
+                // TODO: post template and keywords to BE
+                setTimeout(() => {
+                    vm.step++;
+                }, 2000);
+            },
+        }
     }
 </script>
 
 <style scoped lang="scss">
     @import "../assets/scss/basic-container";
+    @import "../assets/scss/basic-button";
     @import "../assets/scss/helper";
     @import "../assets/scss/theme-color";
+    @import "../assets/scss/animation";
 
     .main-container {
         @extend %main-container;
         @extend %flex-container-column;
         align-items: center;
         width: 100%;
-        height: 100%;
+        flex-shrink: 0;
+    }
+
+    .block {
+        @extend %flex-container-column;
+        flex-shrink: 0;
+        align-items: center;
+        width: 70%;
+        border-radius: 0.2em;
+        padding: 0.4em;
+        margin: 1em 0;
+        box-shadow: $shadow-color 0 0 1em;
+    }
+
+    button {
+        font-size: 1em;
+        padding: 0.2em 0.5em;
+        border-radius: 0.3em;
+        border: $border-color 0.1em solid;
+        background: #fff;
+        @include transition(background .3s);
+        flex-shrink: 0;
+        width: 40%;
+        margin: 1em 0 2em 0;
+    }
+
+    .active-button {
+        cursor: pointer;
+        &:hover {
+            background: $theme-color-light;
+        }
     }
 
     h1, p {
@@ -37,19 +173,6 @@
 
     hr {
         width: 100%;
-    }
-
-    .block {
-        @extend %flex-container-column;
-        align-items: center;
-        width: 70%;
-        /*border: #0d0d46 solid 0.1em;*/
-        /*-webkit-border-radius: 0.5em;*/
-        /*-moz-border-radius: 0.5em;*/
-        border-radius: 0.2em;
-        padding: 0.4em;
-        margin: 1em 0;
-        box-shadow: $shadow-color 0 0 1em;
     }
 
 </style>

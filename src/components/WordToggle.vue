@@ -1,6 +1,9 @@
 <template>
-    <div :class="{selected: selected}"
-         class="no-select"
+    <div :class="{'selected': selected,
+                'hand-cursor': enabled,
+                'enable': enabled,
+                }"
+         class="no-select "
          @click="onToggle">
         {{word}}
     </div>
@@ -12,11 +15,8 @@
         props: {
             word: String,
             id: Number,
-        },
-        data() {
-            return {
-                selected: false,
-            }
+            selected: Boolean,
+            enabled: Boolean,
         },
         methods: {
             onToggle() {
@@ -25,7 +25,6 @@
                 } else {
                     this.$emit('add-word', this.id);
                 }
-                this.selected = !this.selected;
             }
         }
     }
@@ -36,15 +35,18 @@
     @import "../assets/scss/helper";
 
     div {
+        display: inline-block;
         border: $border-color 0.1em solid;
         @include border-radius(50%);
         padding: 0.4em;
         margin: 0.2em;
-        cursor: pointer;
         min-width: 3em;
         text-align: center;
 
         @include transition(background .3s);
+    }
+
+    .enable {
         &:hover {
             background: $theme-color-light;
         }

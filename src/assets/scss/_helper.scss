@@ -20,6 +20,12 @@
   border-radius: $property;
 }
 
+.box-sizing-border-box {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 .no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -27,6 +33,10 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.hand-cursor {
+  cursor: pointer;
 }
 
 .push-right {
