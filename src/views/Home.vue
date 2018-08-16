@@ -22,7 +22,7 @@
     @import "../assets/scss/vars";
 
     .home {
-        @extend %main-container;
+        //@extend %main-container;
         @extend %flex-container-column;
         justify-content: center;
         align-items: center;

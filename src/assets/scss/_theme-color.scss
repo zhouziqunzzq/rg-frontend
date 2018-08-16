@@ -2,7 +2,7 @@
 $theme-color: #060868;
 $theme-color-light: #6982ff;
 $border-color: $theme-color;
-$shadow-color: #0b0e40;
+$shadow-color: rgba(11, 14, 64, 0.61);
 $mask-color: #00000044;
 
 // window
@@ -20,3 +20,9 @@ $template-line-color: #828282;
 // lyric player
 $player-rhyme-word-color: red;
 $player-rhyme-tag-color: #0002ff;
+
+// footer
+$footer-link-color: #7d7d7d;
+
+// block
+$block-border-color: rgba(255, 255, 255, 0.6);

@@ -1,3 +1,6 @@
+@import "helper";
+@import "vars";
+
 // slide-fade
 .slide-fade-enter-active {
   @include transition(all .5s ease);
@@ -36,26 +39,16 @@
   opacity: 0;
 }
 
-// left-slide-fade
-.left-slide-fade-enter-active {
+// bounce
+.bounce-enter-active {
   //@include transition(all .5s ease);
   animation: bounce-in .5s;
 }
 
-.left-slide-fade-leave-active {
+.bounce-leave-active {
   //@include transition(all .5s ease);
   animation: bounce-in .5s reverse;
 }
-//
-//.left-slide-fade-leave-to {
-//  @include transform(translateX(500px));
-//  opacity: 0;
-//}
-//
-//.left-slide-fade-enter {
-//  @include transform(translateX(-500px));
-//  opacity: 0;
-//}
 
 @keyframes bounce-in {
   0% {
@@ -66,5 +59,81 @@
   }
   100% {
     @include transform(scale(1));
+  }
+}
+
+// up-slide-fade
+.up-slide-fade-enter-active {
+  @include transition(all .5s ease);
+}
+
+.up-slide-fade-leave-active {
+  @include transition(all .5s ease);
+}
+
+.up-slide-fade-leave-to {
+  @include transform(translateY(-500px));
+  opacity: 0;
+}
+
+.up-slide-fade-enter {
+  @include transform(translateY(-500px));
+  opacity: 0;
+}
+
+// spin
+@-moz-keyframes spin {
+  100% {
+    @include transform(rotate(360deg));
+  }
+}
+
+@-webkit-keyframes spin {
+  100% {
+    @include transform(rotate(360deg));
+  }
+}
+
+@keyframes spin {
+  100% {
+    @include transform(rotate(360deg));
+  }
+}
+
+// move left upper
+@-moz-keyframes move-lu {
+  100% {
+    @include transform(translate(0-$note-translate-max, 0-$note-translate-max));
+  }
+}
+
+@-webkit-keyframes move-lu {
+  100% {
+    @include transform(translate(0-$note-translate-max, 0-$note-translate-max));
+  }
+}
+
+@keyframes move-lu {
+  100% {
+    @include transform(translate(0-$note-translate-max, 0-$note-translate-max));
+  }
+}
+
+// move right upper
+@-moz-keyframes move-ru {
+  100% {
+    @include transform(translate($note-translate-max, 0-$note-translate-max));
+  }
+}
+
+@-webkit-keyframes move-ru {
+  100% {
+    @include transform(translate($note-translate-max, 0-$note-translate-max));
+  }
+}
+
+@keyframes move-ru {
+  100% {
+    @include transform(translate($note-translate-max, 0-$note-translate-max));
   }
 }

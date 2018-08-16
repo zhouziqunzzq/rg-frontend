@@ -62,14 +62,21 @@
 
     .viewer-wrapper {
         @extend %flex-container-column;
-        top: $nav-height + 2em;
+        //top: $nav-height + 2em;
+        top: 2em;
         flex-shrink: 0;
         width: 60%;
         height: 80%;
         min-height: 100px;
         overflow-y: hidden;
         @include border-radius(0.5em);
-        z-index: 1000;
+        z-index: 2000;
+
+        @media only screen and (max-width: $small-screen-width) {
+            width: 95%;
+            height: 90%;
+            top: 3em;
+        }
     }
 
     .viewer {

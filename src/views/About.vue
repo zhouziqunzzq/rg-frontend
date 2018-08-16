@@ -10,9 +10,9 @@
     @import "../assets/scss/basic-container";
 
     .about {
-        @extend %main-container;
+        //@extend %main-container;
         @extend %flex-container-column;
-        height: 100%;
+        //height: 100%;
         align-items: center;
         justify-content: center;
     }

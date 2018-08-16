@@ -19,6 +19,11 @@ export default new Router({
             component: () => import('./views/Generate.vue')
         },
         {
+            path: '/auxiliary',
+            name: 'auxiliary',
+            component: () => import('./views/Auxiliary.vue')
+        },
+        {
             path: '/about',
             name: 'about',
             component: () => import('./views/About.vue')

@@ -272,6 +272,11 @@
         @extend %flex-container-row;
         width: 100%;
         flex-wrap: wrap;
+
+        @media only screen and (max-width: $small-screen-width) {
+            align-items: center;
+            justify-content: center;
+        }
     }
 
     .center {

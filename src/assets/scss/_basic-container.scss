@@ -45,3 +45,19 @@
   @extend %flex-container-row;
   justify-content: space-between;
 }
+
+.block {
+  @extend %flex-container-column;
+  flex-shrink: 0;
+  align-items: center;
+  width: 85%;
+  padding: 2em 5em;
+  margin: 0;
+  box-shadow: $shadow-color 0.2em 0.2em 0.3em inset, $shadow-color 0.2em 0.2em 0.3em;
+  border: $block-border-color 0.3em solid;
+
+  @media only screen and (max-width: $small-screen-width) {
+    width: 98%;
+    padding: 1em;
+  }
+}

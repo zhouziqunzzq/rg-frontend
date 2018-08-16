@@ -1,11 +1,11 @@
 <template>
     <div :class="{'center': !loadFinishFlag}">
         <Loader v-show="!loadFinishFlag"/>
-        <p v-show="loadFinishFlag">
+        <p v-show="showWordCount && loadFinishFlag">
             当前的模板最多可以选择{{maxWordCount}}个主题词,
             现在共选择了{{selectedWordList.length}}个主题词。
         </p>
-        <div v-show="loadFinishFlag"
+        <div v-show="allowCustomWord && loadFinishFlag"
              class="custom-word-wrapper box-sizing-border-box"
         >
             <input id="custom-word" type="text" placeholder="自定义主题词"
@@ -33,6 +33,8 @@
         components: {WordToggle},
         props: {
             maxWordCount: Number,
+            showWordCount: Boolean,
+            allowCustomWord: Boolean,
         },
         data() {
             return {
@@ -145,11 +147,26 @@
             border-right: none;
             border-radius: 0.3em 0 0 0.3em;
             padding: 0.5em;
+
+            @media only screen and (max-width: $small-screen-width) {
+                width: 70%;
+            }
         }
         & > button {
             @extend %round-button;
             border-radius: 0 0.3em 0.3em 0;
             padding: 0.2em 0.5em 0.3em 0.5em;
+
+            @media only screen and (max-width: $small-screen-width) {
+                width: 25%;
+            }
+        }
+
+        @media only screen and (max-width: $small-screen-width) {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
         }
     }
 

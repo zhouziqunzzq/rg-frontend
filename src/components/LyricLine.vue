@@ -12,8 +12,8 @@
             <h3 class="pre">{{sentencePre}}</h3>
             <h3 class="post complete">{{sentencePost}}</h3>
         </div>
-        <transition name="left-slide-fade" mode="out-in">
-            <h3 class="rhyme-p" v-show="showRhyme">
+        <transition name="bounce" mode="out-in">
+            <h3 class="rhyme-p" v-show="sentence['rhymeToggle'] && showRhyme">
                 【{{sentence['rhymeType']}}
                 <font-awesome-icon icon="times"/>
                 {{sentence['rhymeCount']}}】
@@ -37,14 +37,22 @@
         },
         computed: {
             sentencePre() {
-                let s = this.sentence['lyric'];
-                let l = this.sentence['rhymeWordCount'];
-                return s.substr(0, s.length - l);
+                if (this.sentence['rhymeToggle']) {
+                    let s = this.sentence['lyric'];
+                    let l = this.sentence['rhymeWordCount'];
+                    return s.substr(0, s.length - l);
+                } else {
+                    return this.sentence['lyric'];
+                }
             },
             sentencePost() {
-                let s = this.sentence['lyric'];
-                let l = this.sentence['rhymeWordCount'];
-                return s.substr(s.length - l);
+                if (this.sentence['rhymeToggle']) {
+                    let s = this.sentence['lyric'];
+                    let l = this.sentence['rhymeWordCount'];
+                    return s.substr(s.length - l);
+                } else {
+                    return "";
+                }
             },
         },
         methods: {
@@ -64,6 +72,10 @@
 
     .typing {
         margin: 0;
+
+        @media only screen and (max-width: $small-screen-width) {
+            width: 100%;
+        }
     }
 
     .complete {
@@ -78,10 +90,19 @@
         @extend %flex-container-row;
         margin: 0 0 2em 0;
         justify-content: flex-start;
+
+        @media only screen and (max-width: $small-screen-width) {
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
     }
 
     .rhyme-p {
         margin: 0 0 0 1em;
         color: $player-rhyme-tag-color;
+
+        @media only screen and (max-width: $small-screen-width) {
+            margin: 0;
+        }
     }
 </style>

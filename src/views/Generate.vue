@@ -6,19 +6,21 @@
             <hr/>
             <transition name="fade" mode="out-in">
                 <component :is="componentList[step]"
+                           :show-word-count="true"
                            :max-word-count="maxWordCount"
+                           :allow-custom-word="true"
                            :lyric-list="lyricList"
                            v-on:select-template="onSelectTemplate"
                            v-on:select-word="onSelectWord"
                 />
             </transition>
+            <button @click="onNextClick"
+                    v-show="nextButtonShow[step]"
+                    :disabled="!checkNext"
+                    :class="{'active-button': checkNext}"
+            >{{nextButtonTip[step]}}
+            </button>
         </div>
-        <button @click="onNextClick"
-                v-show="nextButtonShow[step]"
-                :disabled="!checkNext"
-                :class="{'active-button': checkNext}"
-        >{{nextButtonTip[step]}}
-        </button>
     </div>
 </template>
 
@@ -128,24 +130,13 @@
     @import "../assets/scss/helper";
     @import "../assets/scss/theme-color";
     @import "../assets/scss/animation";
+    @import "../assets/scss/vars";
 
     .main-container {
-        @extend %main-container;
         @extend %flex-container-column;
         align-items: center;
         width: 100%;
         flex-shrink: 0;
-    }
-
-    .block {
-        @extend %flex-container-column;
-        flex-shrink: 0;
-        align-items: center;
-        width: 70%;
-        border-radius: 0.2em;
-        padding: 0.4em;
-        margin: 1em 0;
-        box-shadow: $shadow-color 0 0 1em;
     }
 
     button {
@@ -153,11 +144,16 @@
         padding: 0.2em 0.5em;
         border-radius: 0.3em;
         border: $border-color 0.1em solid;
-        background: #fff;
+        background-color: transparent;
         @include transition(background .3s);
         flex-shrink: 0;
         width: 40%;
         margin: 1em 0 2em 0;
+        align-self: flex-end;
+
+        @media only screen and (max-width: $small-screen-width) {
+            width: 100%;
+        }
     }
 
     .active-button {
