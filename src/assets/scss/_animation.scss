@@ -137,3 +137,22 @@
     @include transform(translate($note-translate-max, 0-$note-translate-max));
   }
 }
+
+// move right down
+@-moz-keyframes move-rd {
+  100% {
+    @include transform(translate($note-translate-max, $note-translate-max));
+  }
+}
+
+@-webkit-keyframes move-rd {
+  100% {
+    @include transform(translate($note-translate-max, $note-translate-max));
+  }
+}
+
+@keyframes move-rd {
+  100% {
+    @include transform(translate($note-translate-max, $note-translate-max));
+  }
+}

@@ -5,9 +5,9 @@
         </div>
         <transition name="up-slide-fade">
             <div class="nav" v-show="!hide">
-                <router-link tag="div" class="nav-item" to="/">
-                    <a>欢迎使用</a>
-                </router-link>
+                <!--<router-link tag="div" class="nav-item" to="/">-->
+                    <!--<a>欢迎使用</a>-->
+                <!--</router-link>-->
                 <router-link tag="div" class="nav-item" to="/generate">
                     <a>主题生成</a>
                 </router-link>
@@ -62,7 +62,7 @@
         @media only screen and (max-width: $small-screen-width) {
             flex-wrap: wrap;
             height: auto;
-            margin: 0;
+            margin: 3em 0 0 0;
         }
 
         .nav-item {
@@ -71,7 +71,7 @@
             align-items: center;
             justify-content: center;
             margin: 0 0.05em;
-            padding: 0 0.5em;
+            padding: 0 1em;
             //background: $nav-main-color;
             //@include transition(all .3s);
             a {
@@ -90,7 +90,7 @@
             }
 
             @media only screen and (max-width: $small-screen-width) {
-                width: 100%;
+                width: 40%;
                 margin: 0;
                 padding: 0.8em;
             }

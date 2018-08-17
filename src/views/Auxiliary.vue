@@ -58,12 +58,7 @@
         data() {
             return {
                 step: 0,
-                lyricList: [
-                    // {
-                    //     lyric: "腿 搁在办公桌上",
-                    //     rhymeToggle: false,
-                    // },
-                ],
+                lyricList: [],
                 nowSentence: [],
                 firstSentence: "",
                 selectedWordList: [],
@@ -104,7 +99,7 @@
                         this.generateNextLine(this.firstSentence);
                     }
                 } else {
-                    this.step++;
+                    this.generateNextLine(this.nowSentence.join(''));
                 }
             },
             generateFirstLine(word) {
@@ -121,6 +116,10 @@
             generateNextLine(sentence) {
                 this.step++;
                 let vm = this;
+                // clear now sentence
+                while (vm.nowSentence.length > 0) {
+                    vm.nowSentence.pop();
+                }
                 // TODO: call BE to generate next line
                 console.log(sentence);
                 this.showLoader = true;
@@ -130,10 +129,6 @@
                         lyric: sentence,
                         rhymeToggle: false,
                     });
-                    // clear now sentence
-                    while (vm.nowSentence.length > 0) {
-                        vm.nowSentence.pop();
-                    }
                     // generate next sentence
                     vm.nowSentence.push("腿", "搁", "在", "办公桌", "上");
                     vm.showLoader = false;
@@ -185,6 +180,7 @@
         width: 40%;
         margin: 1em 0 2em 0;
         align-self: flex-end;
+        z-index: 1000;
 
         @media only screen and (max-width: $small-screen-width) {
             width: 100%;

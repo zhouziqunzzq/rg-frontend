@@ -22,19 +22,23 @@
         position: fixed;
         bottom: -5em;
         width: 100%;
+        z-index: -100;
 
         & > img {
             margin: 0 auto;
             width: 10em;
             height: 10em;
-            z-index: -100;
             opacity: 0.8;
             // spin animation
             @include animation(spin 4s linear infinite);
         }
 
         @media only screen and (max-width: $small-screen-width) {
-            display: none;
+            /*display: none;*/
+            top: -4.5em;
+            left: -4.5em;
+            justify-content: flex-start;
+            width: auto;
         }
     }
 </style>

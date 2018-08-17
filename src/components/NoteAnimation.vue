@@ -51,10 +51,6 @@
                     this.$set(this.show, i, false);
                 }
                 this.$set(this.show, nextNoteID, true);
-                // move chosen note
-                let noteEl = this.$el.querySelector('#note' + (nextNoteID + 1));
-                // console.log(noteEl);
-                noteEl.style.transform = 'rotate(7deg)';
             },
             stop() {
                 clearInterval(this.animator);
@@ -80,7 +76,10 @@
         z-index: -100;
 
         @media only screen and (max-width: $small-screen-width) {
-            display: none;
+            top: 0;
+            left: 0;
+            justify-content: flex-start;
+            width: auto;
         }
     }
 
@@ -95,9 +94,15 @@
 
     .animate-lu {
         @include animation(move-lu $animate-speed linear infinite);
+        @media only screen and (max-width: $small-screen-width) {
+            @include animation(move-rd $animate-speed linear infinite);
+        }
     }
 
     .animate-ru {
         @include animation(move-ru $animate-speed linear infinite);
+        @media only screen and (max-width: $small-screen-width) {
+            @include animation(move-rd $animate-speed linear infinite);
+        }
     }
 </style>

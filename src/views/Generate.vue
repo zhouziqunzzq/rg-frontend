@@ -2,7 +2,7 @@
     <div class="main-container">
         <div class="block">
             <h1>{{titleList[step]}}</h1>
-            <p class="push-right">{{subTitleList[step]}}</p>
+            <!--<p class="push-right">{{subTitleList[step]}}</p>-->
             <hr/>
             <transition name="fade" mode="out-in">
                 <component :is="componentList[step]"
@@ -35,7 +35,8 @@
         data() {
             return {
                 step: 0,
-                titleList: ['第一步...', '第二步...', '生成中...', 'And NOW...'],
+                //titleList: ['第一步...', '第二步...', '生成中...', 'And NOW...'],
+                titleList: ['选择模板', '选择主题词', '', 'Enjoy the beat and flow'],
                 subTitleList: ['...选择模板', '...选择主题词', '', '...enjoy the beat and flow'],
                 nextButtonShow: [true, true, false, true],
                 nextButtonTip: ["下一步", "开始生成", "", "重新生成"],
@@ -112,6 +113,8 @@
             },
             onSelectWord(wordList) {
                 this.selectedWordList = wordList;
+                let title = this.selectedWordList.join(" ");
+                this.$set(this.titleList, this.titleList.length - 1, title);
             },
             generate() {
                 let vm = this;

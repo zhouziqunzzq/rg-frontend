@@ -70,11 +70,26 @@
     @import "../assets/scss/animation";
     @import "../assets/scss/theme-color";
 
+    @font-face {
+        font-family: "HYZiYanHuanLeSongJ-2";
+        src: url("../assets/fonts/HYZiYanHuanLeSongJ-2.ttf");
+    }
+
     .typing {
         margin: 0;
+        font-size: 1.3em;
 
         @media only screen and (max-width: $small-screen-width) {
             width: 100%;
+            font-size: 1em;
+        }
+    }
+
+    .typed-element {
+        font-size: 1.3em;
+
+        @media only screen and (max-width: $small-screen-width) {
+            font-size: 1em;
         }
     }
 
@@ -84,6 +99,11 @@
 
     .pre, .post {
         display: inline;
+        font-size: 1.3em;
+
+        @media only screen and (max-width: $small-screen-width) {
+            font-size: 1em;
+        }
     }
 
     .line-wrapper {
@@ -99,10 +119,15 @@
 
     .rhyme-p {
         margin: 0 0 0 1em;
-        color: $player-rhyme-tag-color;
+        color: $nav-text-color;
+        font-family: "HYZiYanHuanLeSongJ-2", sans-serif;
+        font-size: 1.5em;
+        -webkit-text-stroke: 0.05em #fff;
+        text-shadow: 0.1em 0.2em 0.3em #000;
 
         @media only screen and (max-width: $small-screen-width) {
             margin: 0;
+            font-size: 1em;
         }
     }
 </style>
