@@ -10,10 +10,12 @@
                            :max-word-count="maxWordCount"
                            :allow-custom-word="true"
                            :lyric-list="lyricList"
+                           :next-step-trigger="nextStepTrigger"
                            v-on:select-template="onSelectTemplate"
                            v-on:select-word="onSelectWord"
                 />
             </transition>
+            <Loader v-show="showLoader"/>
             <button @click="onNextClick"
                     v-show="nextButtonShow[step]"
                     :disabled="!checkNext"
@@ -28,6 +30,9 @@
     import WordChooser from "../components/WordChooser";
     import TemplateChooser from "../components/TemplateChooser";
     import LyricPlayer from "../components/LyricPlayer";
+    import config from "../config";
+    import buildUrlParam from "../buildUrlParam";
+    import rhymeList from "../rhymeList";
 
     export default {
         name: "Generate",
@@ -36,43 +41,25 @@
             return {
                 step: 0,
                 //titleList: ['第一步...', '第二步...', '生成中...', 'And NOW...'],
-                titleList: ['选择模板', '选择主题词', '', 'Enjoy the beat and flow'],
-                subTitleList: ['...选择模板', '...选择主题词', '', '...enjoy the beat and flow'],
-                nextButtonShow: [true, true, false, true],
-                nextButtonTip: ["下一步", "开始生成", "", "重新生成"],
-                componentList: ["TemplateChooser", "WordChooser", "Loader", "LyricPlayer"],
+                titleList: ['选择模板', '选择主题词', 'Enjoy the beat and flow'],
+                subTitleList: ['...选择模板', '...选择主题词', '...enjoy the beat and flow'],
+                nextButtonShow: [true, true, true],
+                nextButtonTip: ["下一步", "开始生成", "重新生成"],
+                componentList: ["TemplateChooser", "WordChooser", "LyricPlayer"],
                 selectedTemplate: null,
                 selectedWordList: [],
                 lyricList: [
-                    {
-                        lyric: "腿 搁在办公桌上",
-                        rhymeToggle: true,
-                        rhymeType: "双押",
-                        rhymeCount: 1,
-                        rhymeWordCount: 2,
-                    },
-                    {
-                        lyric: "这五六分钟我只关心说唱",
-                        rhymeToggle: true,
-                        rhymeType: "双押",
-                        rhymeCount: 2,
-                        rhymeWordCount: 2,
-                    },
-                    {
-                        lyric: "大脑像硬币投进的湖里的波浪激荡",
-                        rhymeToggle: true,
-                        rhymeType: "双押",
-                        rhymeCount: 3,
-                        rhymeWordCount: 2,
-                    },
-                    {
-                        lyric: "如果你们智商170和我一样",
-                        rhymeToggle: true,
-                        rhymeType: "双押",
-                        rhymeCount: 4,
-                        rhymeWordCount: 2,
-                    },
+                    // {
+                    //     lyric: "腿 搁在办公桌上",
+                    //     rhymeToggle: true,
+                    //     rhymeType: "双押",
+                    //     rhymeCount: 1,
+                    //     rhymeWordCount: 2,
+                    // },
                 ],
+                nextStepTrigger: false,
+                triggerTime: 10,
+                generatedVerseCount: 0,
             }
         },
         computed: {
@@ -94,6 +81,11 @@
                     default:
                         return true;
                 }
+            },
+            showLoader() {
+                return this.step === this.componentList.length - 1
+                    && this.selectedTemplate !== null
+                    && this.generatedVerseCount < this.selectedTemplate['verse_list'].length
             }
         },
         methods: {
@@ -117,11 +109,107 @@
                 this.$set(this.titleList, this.titleList.length - 1, title);
             },
             generate() {
+                // clear lyric list
+                this.clearLyricList();
+
                 let vm = this;
-                // TODO: post template and keywords to BE
-                setTimeout(() => {
-                    vm.step++;
-                }, 2000);
+
+                // TODO: do keyword expansion
+
+                // generate lyric verse by verse
+                let i = 0;
+                for (let verse of vm.selectedTemplate['verse_list']) {
+                    i = Math.min(++i, vm.selectedWordList.length - 1);
+                    let keyword = vm.selectedWordList[i];
+                    fetch(config.urlPrefix + "/generate/verse?" + buildUrlParam({
+                        keyword: keyword,
+                        num_sentence: verse['sentence_count'],
+                        target_length: verse['word_count'],
+                        rhyme_mode: verse['rhyme_mode'],
+                        rhyme_style_id: verse['rhyme_style_id']
+                    }))
+                        .then(res => {
+                            res.json()
+                                .then(sentenceList => {
+                                    // push sentences of generated verse to lyric list
+                                    let sentences = vm.formatSentenceList(sentenceList, verse);
+                                    console.log(sentences);
+                                    for (let s of sentences) {
+                                        vm.lyricList.push(s);
+                                    }
+                                    // trigger lyric player
+                                    vm.nextStepTrigger = true;
+                                    setTimeout(() => {
+                                        vm.nextStepTrigger = false
+                                    }, this.triggerTime);
+                                    // increase generated verse counter
+                                    vm.generatedVerseCount++;
+                                })
+                        })
+                }
+            },
+            formatSentenceList(sentenceList, verse) {
+                let rst = [];
+                let cnt = 1;
+                switch (verse['rhyme_style_id']) {
+                    case 0: //排韵
+                        for (let s of sentenceList) {
+                            rst.push({
+                                lyric: s,
+                                rhymeToggle: true,
+                                rhymeType: rhymeList.rhymeModeList[verse['rhyme_mode']],
+                                rhymeCount: cnt++,
+                                rhymeWordCount: verse['rhyme_mode'],
+                            });
+                        }
+                        break;
+                    case 1: //交韵
+                        for (let s of sentenceList) {
+                            rst.push({
+                                lyric: s,
+                                rhymeToggle: true,
+                                rhymeType: rhymeList.rhymeStyleList[verse['rhyme_style_id']]
+                                    + " " + rhymeList.rhymeModeList[verse['rhyme_mode']],
+                                rhymeCount: cnt++,
+                                rhymeWordCount: verse['rhyme_mode'],
+                            });
+                        }
+                        break;
+                    case 2: //隔行押
+                        for (let s of sentenceList) {
+                            rst.push({
+                                lyric: s,
+                                rhymeToggle: cnt % 2 === 0,
+                                rhymeType: rhymeList.rhymeStyleList[verse['rhyme_style_id']]
+                                    + " " + rhymeList.rhymeModeList[verse['rhyme_mode']],
+                                rhymeCount: Math.floor(cnt / 2),
+                                rhymeWordCount: verse['rhyme_mode'],
+                            });
+                            cnt++;
+                        }
+                        break;
+                    case 3: //抱韵 保证4句
+                        for (let s of sentenceList) {
+                            rst.push({
+                                lyric: s,
+                                rhymeToggle: true,
+                                rhymeType: rhymeList.rhymeStyleList[verse['rhyme_style_id']]
+                                    + " " + rhymeList.rhymeModeList[verse['rhyme_mode']],
+                                rhymeCount: cnt++,
+                                rhymeWordCount: verse['rhyme_mode'],
+                            });
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                return rst;
+            },
+            clearLyricList() {
+                this.generatedVerseCount = 0;
+                while (this.lyricList.length > 0) {
+                    this.lyricList.pop();
+                }
             },
         }
     }

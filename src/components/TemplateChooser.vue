@@ -52,8 +52,8 @@
                 fetch(config.urlPrefix + "/templates")
                     .then(res => {
                         res.json()
-                            .then(res => {
-                                for (let t of res)
+                            .then(tList => {
+                                for (let t of tList)
                                     vm.templateList.push(t);
                             })
                     });

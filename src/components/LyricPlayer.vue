@@ -22,6 +22,7 @@
         components: {LyricLine},
         props: {
             lyricList: Array,
+            nextStepTrigger: Boolean,
         },
         data() {
             return {
@@ -30,6 +31,7 @@
                 typeSpeed: 100,
                 typeInterval: 500,
                 scrollInterval: 100,
+                sentenceInterval: 1500,
             }
         },
         computed: {
@@ -38,16 +40,28 @@
             }
         },
         methods: {
+            // nextStep() {
+            //     let vm = this;
+            //     let lastLen = this.lyricList[this.step]['lyric'].length;
+            //     this.sentences.push(this.lyricList[this.step++]);
+            //     setTimeout(vm.scrollToBottom, vm.scrollInterval);
+            //     if (this.step === this.lyricList.length) {
+            //         return null;
+            //     } else {
+            //         setTimeout(vm.nextStep,
+            //             (lastLen + 1) * this.typeSpeed + this.typeInterval);
+            //     }
+            // },
             nextStep() {
                 let vm = this;
-                let lastLen = this.lyricList[this.step]['lyric'].length;
-                this.sentences.push(this.lyricList[this.step++]);
-                setTimeout(vm.scrollToBottom, vm.scrollInterval);
-                if (this.step === this.lyricList.length) {
-                    return null;
-                } else {
-                    setTimeout(vm.nextStep,
-                        (lastLen + 1) * this.typeSpeed + this.typeInterval);
+                let cnt = 0;
+                for (let i = vm.step; i < vm.lyricList.length; i++) {
+                    setTimeout(() => {
+                        vm.sentences.push(vm.lyricList[i]);
+                        setTimeout(vm.scrollToBottom, vm.scrollInterval);
+                    }, cnt * vm.sentenceInterval);
+                    cnt++;
+                    vm.step++;
                 }
             },
             play() {
@@ -77,7 +91,14 @@
             }
         },
         mounted() {
-            this.play();
+            //this.play();
+        },
+        watch: {
+            nextStepTrigger(newValue) {
+                if (newValue === true) {
+                    this.nextStep();
+                }
+            }
         },
     }
 </script>
