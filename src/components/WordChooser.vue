@@ -27,6 +27,7 @@
 
 <script>
     import WordToggle from "./WordToggle";
+    import themeWordList from "../themeWordList";
 
     export default {
         name: "WordChooser",
@@ -106,12 +107,8 @@
                 this.wordList.splice(0, this.wordList.length);
                 this.selectedFlag.splice(0, this.selectedFlag.length);
                 // TODO: Get word list from BE
-                let fakeWordList = ["我的", "你的", "他的", "cat", "dog", "a", "is", "are", "腿",
-                    "办公桌", "太强了", "萌新瑟瑟发抖", "仰望高端玩家"];
-                setTimeout(() => {
-                    for (let w of fakeWordList)
-                        vm.wordList.push(w);
-                }, 1000);
+                for (let w of themeWordList)
+                    vm.wordList.push(w);
                 // init selected flag
                 for (let i = 0; i < this.wordList.length; i++)
                     this.selectedFlag.push(false);

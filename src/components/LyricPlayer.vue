@@ -1,5 +1,10 @@
 <template>
     <div class="lyric-wrapper box-sizing-border-box">
+        <font-awesome-icon icon="share-alt"
+                           class="share hand-cursor"
+                           v-show="shareable"
+                           @click="share"
+        />
         <LyricLine
                 v-for="(s, i) in sentences"
                 :key="'s'+i"
@@ -27,6 +32,12 @@
                 scrollInterval: 100,
             }
         },
+        computed: {
+            shareable() {
+                return true;
+                // return navigator.share;
+            }
+        },
         methods: {
             nextStep() {
                 let vm = this;
@@ -51,6 +62,15 @@
             },
             scrollToBottom() {
                 this.$emit('scroll-to-end');
+            },
+            share() {
+                navigator.share({
+                    title: "分享歌词 - 由七言AI生成",
+                    text: this.lyricList.join('\n'),
+                    url: document.location.href,
+                })
+                    .then(() => console.log('Successful share'))
+                    .catch((error) => console.log('Error sharing', error));
             }
         },
         mounted() {
@@ -65,5 +85,12 @@
     .lyric-wrapper {
         width: 100%;
         padding: 2em;
+    }
+
+    .share {
+        font-size: 1.5em;
+        position: absolute;
+        right: 0.5em;
+        top: 1em;
     }
 </style>
