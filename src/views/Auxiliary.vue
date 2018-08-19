@@ -116,7 +116,7 @@
             generateNextLine(sentence) {
                 this.step++;
                 let vm = this;
-                // clear now sentence
+                // clear now sentenceLength
                 while (vm.nowSentence.length > 0) {
                     vm.nowSentence.pop();
                 }
@@ -124,12 +124,12 @@
                 console.log(sentence);
                 this.showLoader = true;
                 setTimeout(() => {
-                    // save now sentence to final lyrics
+                    // save now sentenceLength to final lyrics
                     vm.lyricList.push({
                         lyric: sentence,
                         rhymeToggle: false,
                     });
-                    // generate next sentence
+                    // generate next sentenceLength
                     vm.nowSentence.push("腿", "搁", "在", "办公桌", "上");
                     vm.showLoader = false;
                 }, 1000);

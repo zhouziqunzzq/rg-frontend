@@ -7,15 +7,17 @@
                                    @click="$emit('close-viewer')"
                 />
                 <h3>{{template['name']}}</h3>
-                <div v-for="(verse, index) in template['verseList']"
+                <div v-for="(verse, index) in template['verse_list']"
                      :key="'v'+index">
-                    <h4>Verse {{index+1}}</h4>
+                    <h4>Verse {{index+1}} ({{getRhymeMode(verse['rhyme_mode'])}},
+                        {{getRhymeStyle(verse['rhyme_style_id'])}})
+                    </h4>
                     <TemplateLine
-                            v-for="(sentence, index) in verse['sentenceList']"
-                            :key="'s'+index"
-                            :sentence="sentence"
+                            class="more-margin"
+                            v-for="s in verse['sentence_count']"
+                            :key="'s'+s"
+                            :sentence-length="verse['word_count']"
                             :max-length="maxSentenceLength"
-                            :show-detail="true"
                     />
                 </div>
                 <button @click="$emit('select'), $emit('close-viewer')">选择此模板</button>
@@ -26,6 +28,7 @@
 
 <script>
     import TemplateLine from "./TemplateLine";
+    import rhymeList from "../rhymeList";
 
     export default {
         name: "TemplateViewer",
@@ -36,14 +39,20 @@
         computed: {
             maxSentenceLength() {
                 let maxLen = 0;
-                for (let verse of this.template['verseList']) {
-                    for (let sentence of verse['sentenceList']) {
-                        maxLen = Math.max(maxLen, sentence['wordCount']);
-                    }
+                for (let verse of this.template['verse_list']) {
+                    maxLen = Math.max(maxLen, verse['word_count']);
                 }
                 return maxLen;
             }
         },
+        methods: {
+            getRhymeMode(id) {
+                return rhymeList.rhymeModeList[id];
+            },
+            getRhymeStyle(id) {
+                return rhymeList.rhymeStyleList[id];
+            }
+        }
     }
 </script>
 
@@ -103,6 +112,10 @@
         }
     }
 
+    .more-margin {
+        margin: 0.6em 0 !important;
+    }
+
     h3 {
         text-align: center;
         font-weight: bold;
@@ -119,6 +132,7 @@
     button {
         @extend %round-button;
         flex-shrink: 0;
+        margin: 1em 0;
     }
 
 </style>

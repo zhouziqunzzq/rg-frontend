@@ -2,14 +2,13 @@
     <div class="thumbnail-container">
         <div class="thumbnail-container-inner"
             :class="{'selected': selected}">
-            <div v-for="(verse, index) in template['verseList']"
+            <div v-for="(verse, index) in template['verse_list']"
                  :key="'v'+index"
             >
-                <TemplateLine v-for="(sentence, index) in verse['sentenceList']"
-                              :key="'s'+index"
-                              :sentence="sentence"
+                <TemplateLine v-for="s in verse['sentence_count']"
+                              :key="'s'+s"
+                              :sentence-length="verse['word_count']"
                               :max-length="maxSentenceLength"
-                              :show-detail="false"
                 />
             </div>
         </div>
@@ -30,12 +29,9 @@
         computed: {
             maxSentenceLength() {
                 let maxLen = 0;
-                for (let verse of this.template['verseList']) {
-                    for (let sentence of verse['sentenceList']) {
-                        maxLen = Math.max(maxLen, sentence['wordCount']);
-                    }
+                for (let verse of this.template['verse_list']) {
+                    maxLen = Math.max(maxLen, verse['word_count']);
                 }
-                // console.log('maxLen=', maxLen);
                 return maxLen;
             }
         }

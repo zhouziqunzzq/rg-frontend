@@ -80,7 +80,7 @@
                 if (this.selectedTemplate === null)
                     return 0;
                 else
-                    return this.selectedTemplate['verseList'].length;
+                    return this.selectedTemplate['verse_list'].length;
             },
             checkNext() {
                 // return true if validate ok
@@ -90,7 +90,7 @@
                     case 1: // keyword
                         return this.selectedWordList.length > 0
                             && this.selectedTemplate !== null
-                            && this.selectedWordList.length <= this.selectedTemplate['verseList'].length;
+                            && this.selectedWordList.length <= this.selectedTemplate['verse_list'].length;
                     default:
                         return true;
                 }

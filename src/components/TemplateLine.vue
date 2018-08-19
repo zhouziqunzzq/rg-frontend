@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div class="bar"
-             :style="{width: (sentence['wordCount']/maxLength*100)+'%'}"></div>
-        <div v-if="showDetail">
-            <p class="info">({{sentence['wordCount']}} words,
-                {{sentence['rhyme_type']}},
-                {{sentence['rhyme_pinyin']}})
-            </p>
-        </div>
+        <div class="bar box-sizing-border-box"
+             :style="{width: (sentenceLength/maxLength*100)+'%'}"></div>
+        <!--<div v-if="showDetail">-->
+            <!--<p class="info">({{sentenceLength['wordCount']}} words,-->
+                <!--{{sentenceLength['rhyme_type']}},-->
+                <!--{{sentenceLength['rhyme_pinyin']}})-->
+            <!--</p>-->
+        <!--</div>-->
     </div>
 </template>
 
@@ -15,9 +15,9 @@
     export default {
         name: "TemplateLine",
         props: {
-            sentence: Object,
+            sentenceLength: Number,
             maxLength: Number,
-            showDetail: Boolean,
+            // showDetail: Boolean,
         }
     }
 </script>
@@ -29,7 +29,7 @@
     .bar {
         background: $template-line-color;
         height: 0.5em;
-        margin: 0.2em;
+        margin: 0.2em 0;
         @include border-radius(1em);
     }
 

@@ -19,7 +19,7 @@
     export default {
         name: "LyricEditor",
         props: {
-            sentence: Array,
+            sentenceLength: Array,
         },
         data() {
             return {
@@ -34,13 +34,13 @@
             },
             init() {
                 this.clearEditing();
-                for (let w of this.sentence) {
+                for (let w of this.sentenceLength) {
                     this.editingSentence.push(w);
                 }
             },
         },
         watch: {
-            sentence() {
+            sentenceLength() {
                 this.init();
             },
         },
