@@ -66,7 +66,7 @@
             share() {
                 navigator.share({
                     title: "分享歌词 - 由七言AI生成",
-                    text: this.lyricList.join('\n'),
+                    text: this.sentences.join('\n'),
                     url: document.location.href,
                 })
                     .then(() => console.log('Successful share'))

@@ -33,6 +33,7 @@
 <style scoped lang="scss">
     @import "../assets/scss/theme-color";
     @import "../assets/scss/helper";
+    @import "../assets/scss/vars";
 
     div {
         display: inline-block;
@@ -44,12 +45,6 @@
         text-align: center;
 
         @include transition(background .3s);
-    }
-
-    .enable {
-        &:hover {
-            background: $theme-color-light;
-        }
     }
 
     .selected {
