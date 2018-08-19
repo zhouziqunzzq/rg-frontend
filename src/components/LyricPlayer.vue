@@ -34,7 +34,6 @@
         },
         computed: {
             shareable() {
-                // return true;
                 return navigator.share;
             }
         },
@@ -64,9 +63,13 @@
                 this.$emit('scroll-to-end');
             },
             share() {
+                let shareText = "分享歌词 - 由七言AI生成\n";
+                for (let s of this.lyricList) {
+                    shareText = shareText + s['lyric'] + "\n";
+                }
                 navigator.share({
                     title: "分享歌词 - 由七言AI生成",
-                    text: this.sentences.join('\n'),
+                    text: shareText,
                     url: document.location.href,
                 })
                     .then(() => console.log('Successful share'))
