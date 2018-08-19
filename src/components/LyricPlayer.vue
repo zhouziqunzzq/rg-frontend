@@ -34,8 +34,8 @@
         },
         computed: {
             shareable() {
-                return true;
-                // return navigator.share;
+                // return true;
+                return navigator.share;
             }
         },
         methods: {
