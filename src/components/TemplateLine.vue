@@ -4,8 +4,8 @@
              :style="{width: (sentence['wordCount']/maxLength*100)+'%'}"></div>
         <div v-if="showDetail">
             <p class="info">({{sentence['wordCount']}} words,
-                {{sentence['rhymeType']}},
-                {{sentence['rhymePinyin']}})
+                {{sentence['rhyme_type']}},
+                {{sentence['rhyme_pinyin']}})
             </p>
         </div>
     </div>
