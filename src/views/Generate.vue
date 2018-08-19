@@ -119,8 +119,9 @@
                 // generate lyric verse by verse
                 let i = 0;
                 for (let verse of vm.selectedTemplate['verse_list']) {
-                    i = Math.min(++i, vm.selectedWordList.length - 1);
+                    i = Math.min(i, vm.selectedWordList.length - 1);
                     let keyword = vm.selectedWordList[i];
+                    i++;
                     fetch(config.urlPrefix + "/generate/verse?" + buildUrlParam({
                         keyword: keyword,
                         num_sentence: verse['sentence_count'],
@@ -133,7 +134,7 @@
                                 .then(sentenceList => {
                                     // push sentences of generated verse to lyric list
                                     let sentences = vm.formatSentenceList(sentenceList, verse);
-                                    console.log(sentences);
+                                    // console.log(sentences);
                                     for (let s of sentences) {
                                         vm.lyricList.push(s);
                                     }
