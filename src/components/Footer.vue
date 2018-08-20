@@ -29,7 +29,7 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        z-index: 99;
+        z-index: 98;
 
         a {
             text-decoration: none;

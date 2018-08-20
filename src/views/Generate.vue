@@ -242,6 +242,7 @@
         width: 40%;
         margin: 1em 0 2em 0;
         align-self: flex-end;
+        z-index: 99;
 
         @media only screen and (max-width: $small-screen-width) {
             width: 100%;
