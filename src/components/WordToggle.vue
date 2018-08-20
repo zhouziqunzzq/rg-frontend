@@ -2,6 +2,7 @@
     <div :class="{'selected': selected,
                 'hand-cursor': enabled,
                 'enable': enabled,
+                'hover-able': hoverAble,
                 }"
          class="no-select "
          @click="onToggle">
@@ -17,10 +18,12 @@
             id: Number,
             selected: Boolean,
             enabled: Boolean,
+            toggleAble: Boolean,
+            hoverAble: Boolean,
         },
         methods: {
             onToggle() {
-                if (this.selected) {
+                if (this.toggleAble && this.selected) {
                     this.$emit('delete-word', this.id);
                 } else {
                     this.$emit('add-word', this.id);
@@ -45,6 +48,10 @@
         text-align: center;
 
         @include transition(background .3s);
+    }
+
+    .hover-able:hover {
+        background: $theme-color-light;
     }
 
     .selected {

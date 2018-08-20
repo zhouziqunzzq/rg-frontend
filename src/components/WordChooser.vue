@@ -18,6 +18,8 @@
                     :key="'wt'+index" :word="word" :id="index"
                     :selected="selectedFlag[index]"
                     :enabled="!maxWordCountFlag"
+                    :toggle-able="true"
+                    :hover-able="false"
                     v-on:add-word="onAddWord"
                     v-on:delete-word="onDeleteWord"
         />

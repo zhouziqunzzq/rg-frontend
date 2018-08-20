@@ -49,7 +49,7 @@
                 this.selectedTemplateFlag.splice(0, this.selectedTemplateFlag.length);
                 this.selectedTemplateID = -1;
                 // get template list from BE
-                fetch(config.urlPrefix + "/templates")
+                fetch(config.urlPrefix + "/templates/")
                     .then(res => {
                         res.json()
                             .then(tList => {

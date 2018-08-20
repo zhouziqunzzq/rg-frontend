@@ -9,6 +9,11 @@
                         <h2>
                             要开始，请选择一个主题词...
                         </h2>
+                        <transition name="fade">
+                            <h3 v-show="showFSWarning">
+                                非常抱歉，无法使用该主题词生成第一句，请换一个主题词重试
+                            </h3>
+                        </transition>
                         <WordChooser
                                 :show-word-count="false"
                                 :max-word-count="1"
@@ -36,6 +41,7 @@
             <Loader v-show="showLoader"/>
             <LyricEditor v-show="step>=1"
                          :sentence="nowSentence"
+                         v-on:edit-sentence="onEditSentence"
             />
             <button @click="onNextClick"
                     v-show="nextButtonShow"
@@ -51,6 +57,8 @@
     import WordChooser from "../components/WordChooser";
     import LyricLine from "../components/LyricLine";
     import LyricEditor from "../components/LyricEditor";
+    import config from "../config";
+    import buildUrlParam from "../buildUrlParam";
 
     export default {
         name: "Auxiliary",
@@ -60,9 +68,11 @@
                 step: 0,
                 lyricList: [],
                 nowSentence: [],
+                nowSentenceEdited: [],
                 firstSentence: "",
                 selectedWordList: [],
                 showLoader: false,
+                showFSWarning: false,
             }
         },
         computed: {
@@ -99,43 +109,70 @@
                         this.generateNextLine(this.firstSentence);
                     }
                 } else {
-                    this.generateNextLine(this.nowSentence.join(''));
+                    if (this.nowSentenceEdited.length > 0)
+                        this.generateNextLine(this.nowSentenceEdited.join(''));
+                    else
+                        this.generateNextLine(this.nowSentence.join(''));
+                    this.nowSentenceEdited = [];
                 }
             },
             generateFirstLine(word) {
-                this.step++;
                 let vm = this;
-                // TODO: call BE to generate first line
-                console.log(word);
-                this.showLoader = true;
-                setTimeout(() => {
-                    vm.nowSentence.push("腿", "搁", "在", "办公桌", "上");
-                    vm.showLoader = false;
-                }, 1000);
+                vm.showLoader = true;
+                fetch(config.urlPrefix + "/generate/first_sentence?" + buildUrlParam({
+                    keyword: word,
+                }))
+                    .then(res => {
+                        res.json()
+                            .then(res => {
+                                if (res.result) {
+                                    for (let w of res.sentence) {
+                                        vm.nowSentence.push(w);
+                                    }
+                                    this.step++;
+                                } else {
+                                    vm.showFSWarning = true;
+                                }
+                                vm.showLoader = false;
+                            })
+                    });
             },
             generateNextLine(sentence) {
-                this.step++;
+                this.showLoader = true;
                 let vm = this;
+                // save now sentenceLength to final lyrics
+                vm.lyricList.push({
+                    lyric: sentence,
+                    rhymeToggle: false,
+                });
                 // clear now sentenceLength
                 while (vm.nowSentence.length > 0) {
                     vm.nowSentence.pop();
                 }
-                // TODO: call BE to generate next line
-                console.log(sentence);
-                this.showLoader = true;
-                setTimeout(() => {
-                    // save now sentenceLength to final lyrics
-                    vm.lyricList.push({
-                        lyric: sentence,
-                        rhymeToggle: false,
+                // call BE to generate next line
+                let data = new FormData();
+                data.append("sentence", sentence);
+                fetch(config.urlPrefix + "/generate/next_sentence", {
+                    method: 'POST',
+                    body: data
+                })
+                    .then(res => {
+                        res.json()
+                            .then(res => {
+                                for (let w of res) {
+                                    vm.nowSentence.push(w);
+                                }
+                                this.step++;
+                                this.showLoader = false;
+                            })
                     });
-                    // generate next sentenceLength
-                    vm.nowSentence.push("腿", "搁", "在", "办公桌", "上");
-                    vm.showLoader = false;
-                }, 1000);
             },
             onSelectWord(wordList) {
                 this.selectedWordList = wordList;
+                this.showFSWarning = false;
+            },
+            onEditSentence(s) {
+                this.nowSentenceEdited = s;
             },
         },
     }
