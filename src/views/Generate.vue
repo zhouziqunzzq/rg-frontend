@@ -111,10 +111,7 @@
             generate() {
                 // clear lyric list
                 this.clearLyricList();
-
                 let vm = this;
-
-                // TODO: do keyword expansion
 
                 // generate lyric verse by verse
                 let i = 0;
@@ -122,7 +119,15 @@
                     i = Math.min(i, vm.selectedWordList.length - 1);
                     let keyword = vm.selectedWordList[i];
                     i++;
-                    fetch(config.urlPrefix + "/generate/verse?" + buildUrlParam({
+
+                    // rhyme or freestyle
+                    let apiAddr = "";
+                    if (verse['rhyme_toggle'])
+                        apiAddr = "/generate/verse?";
+                    else
+                        apiAddr = "/generate/freestyle?";
+
+                    fetch(config.urlPrefix + apiAddr + buildUrlParam({
                         keyword: keyword,
                         num_sentence: verse['sentence_count'],
                         target_length: verse['word_count'],
@@ -152,57 +157,66 @@
             formatSentenceList(sentenceList, verse) {
                 let rst = [];
                 let cnt = 1;
-                switch (verse['rhyme_style_id']) {
-                    case 0: //排韵
-                        for (let s of sentenceList) {
-                            rst.push({
-                                lyric: s,
-                                rhymeToggle: true,
-                                rhymeType: rhymeList.rhymeModeList[verse['rhyme_mode']],
-                                rhymeCount: cnt++,
-                                rhymeWordCount: verse['rhyme_mode'],
-                            });
-                        }
-                        break;
-                    case 1: //交韵
-                        for (let s of sentenceList) {
-                            rst.push({
-                                lyric: s,
-                                rhymeToggle: true,
-                                rhymeType: rhymeList.rhymeStyleList[verse['rhyme_style_id']]
-                                    + " " + rhymeList.rhymeModeList[verse['rhyme_mode']],
-                                rhymeCount: cnt++,
-                                rhymeWordCount: verse['rhyme_mode'],
-                            });
-                        }
-                        break;
-                    case 2: //隔行押
-                        for (let s of sentenceList) {
-                            rst.push({
-                                lyric: s,
-                                rhymeToggle: cnt % 2 === 0,
-                                rhymeType: rhymeList.rhymeStyleList[verse['rhyme_style_id']]
-                                    + " " + rhymeList.rhymeModeList[verse['rhyme_mode']],
-                                rhymeCount: Math.floor(cnt / 2),
-                                rhymeWordCount: verse['rhyme_mode'],
-                            });
-                            cnt++;
-                        }
-                        break;
-                    case 3: //抱韵 保证4句
-                        for (let s of sentenceList) {
-                            rst.push({
-                                lyric: s,
-                                rhymeToggle: true,
-                                rhymeType: rhymeList.rhymeStyleList[verse['rhyme_style_id']]
-                                    + " " + rhymeList.rhymeModeList[verse['rhyme_mode']],
-                                rhymeCount: cnt++,
-                                rhymeWordCount: verse['rhyme_mode'],
-                            });
-                        }
-                        break;
-                    default:
-                        break;
+                if (verse['rhyme_toggle']) {
+                    switch (verse['rhyme_style_id']) {
+                        case 0: //排韵
+                            for (let s of sentenceList) {
+                                rst.push({
+                                    lyric: s,
+                                    rhymeToggle: true,
+                                    rhymeType: rhymeList.rhymeModeList[verse['rhyme_mode']],
+                                    rhymeCount: cnt++,
+                                    rhymeWordCount: verse['rhyme_mode'],
+                                });
+                            }
+                            break;
+                        case 1: //交韵
+                            for (let s of sentenceList) {
+                                rst.push({
+                                    lyric: s,
+                                    rhymeToggle: true,
+                                    rhymeType: rhymeList.rhymeStyleList[verse['rhyme_style_id']]
+                                        + " " + rhymeList.rhymeModeList[verse['rhyme_mode']],
+                                    rhymeCount: cnt++,
+                                    rhymeWordCount: verse['rhyme_mode'],
+                                });
+                            }
+                            break;
+                        case 2: //隔行押
+                            for (let s of sentenceList) {
+                                rst.push({
+                                    lyric: s,
+                                    rhymeToggle: cnt % 2 === 0,
+                                    rhymeType: rhymeList.rhymeStyleList[verse['rhyme_style_id']]
+                                        + " " + rhymeList.rhymeModeList[verse['rhyme_mode']],
+                                    rhymeCount: Math.floor(cnt / 2),
+                                    rhymeWordCount: verse['rhyme_mode'],
+                                });
+                                cnt++;
+                            }
+                            break;
+                        case 3: //抱韵 保证4句
+                            for (let s of sentenceList) {
+                                rst.push({
+                                    lyric: s,
+                                    rhymeToggle: true,
+                                    rhymeType: rhymeList.rhymeStyleList[verse['rhyme_style_id']]
+                                        + " " + rhymeList.rhymeModeList[verse['rhyme_mode']],
+                                    rhymeCount: cnt++,
+                                    rhymeWordCount: verse['rhyme_mode'],
+                                });
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    for (let s of sentenceList) {
+                        rst.push({
+                            lyric: s,
+                            rhymeToggle: false,
+                        });
+                    }
                 }
                 return rst;
             },

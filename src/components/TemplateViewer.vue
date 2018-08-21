@@ -9,9 +9,11 @@
                 <h3>{{template['name']}}</h3>
                 <div v-for="(verse, index) in template['verse_list']"
                      :key="'v'+index">
-                    <h4>Verse {{index+1}} ({{getRhymeMode(verse['rhyme_mode'])}},
+                    <h4 v-if="verse['rhyme_toggle']">Verse {{index+1}}
+                        ({{getRhymeMode(verse['rhyme_mode'])}},
                         {{getRhymeStyle(verse['rhyme_style_id'])}})
                     </h4>
+                    <h4 v-else>Verse {{index+1}} (Freestyle)</h4>
                     <TemplateLine
                             class="more-margin"
                             v-for="s in verse['sentence_count']"
