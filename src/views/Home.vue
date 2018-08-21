@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <img alt="Vue logo" src="../assets/img/logo.png">
+        <img class="logo" alt="logo" src="../assets/img/logo.png">
         <HelloWorld msg="Rap Generator"/>
     </div>
 </template>
@@ -26,5 +26,12 @@
         @extend %flex-container-column;
         justify-content: center;
         align-items: center;
+    }
+
+    .logo {
+        width: 30%;
+        @media only screen and (max-width: $small-screen-width) {
+            width: 80%;
+        }
     }
 </style>

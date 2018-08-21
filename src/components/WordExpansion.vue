@@ -1,6 +1,19 @@
 <template>
     <div class="word-container-1">
         <Loader v-show="showLoader"/>
+        <div class="word-list box-sizing-border-box" id="rhyme-word-list" v-show="!showLoader">
+            <h3>押韵词</h3>
+            <hr/>
+            <WordToggle v-for="(word, index) in rhymeWordList"
+                        :key="'rw-wt'+index" :word="word" :id="index"
+                        :selected="false"
+                        :enabled="true"
+                        :toggle-able="false"
+                        :hover-able="true"
+                        v-on:add-word="onSelectRhymeWord"
+            />
+            <p v-show="rhymeWordList.length === 0">空空如也</p>
+        </div>
         <div class="word-list box-sizing-border-box" id="co-exist-word-list" v-show="!showLoader">
             <h3>共同出现词</h3>
             <hr/>
@@ -43,16 +56,21 @@
         },
         data() {
             return {
-                coExistWordList: ["测试", "海星"],
+                coExistWordList: [],
                 coExistLoadedFlag: false,
                 crawlerWordList: [],
                 crawlerLoadedFlag: false,
-                crawlerNum: 5,
+                crawlerNum: 10,
+                rhymeWordList: [],
+                rhymeLoadedFlag: false,
+                rhymeNum: 10,
             }
         },
         computed: {
             showLoader() {
-                return !(this.coExistLoadedFlag && this.crawlerLoadedFlag);
+                return !(this.coExistLoadedFlag
+                    && this.crawlerLoadedFlag
+                    && this.rhymeLoadedFlag);
             }
         },
         methods: {
@@ -64,6 +82,7 @@
             clearAll() {
                 this.clearList(this.coExistWordList);
                 this.clearList(this.crawlerWordList);
+                this.clearList(this.rhymeWordList);
             },
             loadCoExistWord(word) {
                 let vm = this;
@@ -98,6 +117,26 @@
                             })
                     })
             },
+            loadRhymeWord(word) {
+                let vm = this;
+                vm.rhymeLoadedFlag = false;
+                fetch(config.urlPrefix + "/rhyme/?" + buildUrlParam({
+                    str: word,
+                    num: vm.rhymeNum,
+                }))
+                    .then(res => {
+                        res.json()
+                            .then(data => {
+                                for (let w of data) {
+                                    vm.rhymeWordList.push(w);
+                                }
+                                vm.rhymeLoadedFlag = true;
+                            })
+                    })
+                    .catch(() => {
+                        vm.rhymeLoadedFlag = true;
+                    });
+            },
             onSelectCoExistWord(id) {
                 // console.log(this.coExistWordList[id]);
                 this.$emit("select-word", this.coExistWordList[id])
@@ -106,12 +145,17 @@
                 // console.log(this.crawlerWordList[id]);
                 this.$emit("select-word", this.crawlerWordList[id])
             },
+            onSelectRhymeWord(id) {
+                // console.log(this.crawlerWordList[id]);
+                this.$emit("select-word", this.rhymeWordList[id])
+            },
         },
         watch: {
             targetWord(newWord) {
                 this.clearAll();
                 this.loadCoExistWord(newWord);
                 this.loadCrawlerWord(newWord);
+                this.loadRhymeWord(newWord);
             },
         },
     }
@@ -131,7 +175,7 @@
     }
 
     .word-list {
-        width: 40%;
+        width: 30%;
         border: $border-color solid 0.1em;
         border-radius: 0.2em;
         margin: 0.3em;

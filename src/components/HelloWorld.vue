@@ -1,9 +1,9 @@
 <template>
     <div>
-        <h1>{{ msg }}</h1>
-        <p>
-            Feel the beat and the flow...
-        </p>
+        <!--<h1>{{ msg }}</h1>-->
+        <!--<p>-->
+            <!--Feel the beat and the flow...-->
+        <!--</p>-->
         <button @click="gotoAbout">
             Let's Go
             <font-awesome-icon icon="arrow-right"/>
