@@ -82,7 +82,7 @@
                     shareText = shareText + s['lyric'] + "\n";
                 }
                 navigator.share({
-                    title: "分享歌词 - 由七言AI生成",
+                    title: "分享歌词 - 由七言RAPPER生成",
                     text: shareText,
                     url: document.location.href,
                 })
